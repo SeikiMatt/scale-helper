@@ -13,7 +13,7 @@
     "lint": "next lint",
     "build": "next build",
     "start": "next start",
-    "test": "jest --passWithNoTests",
+    "test": "jest",
     "test:watch": "jest --watch",
     "test:ci": "jest --ci",
     "test:e2e": "playwright test",

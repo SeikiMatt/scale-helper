@@ -2,6 +2,47 @@ import Head from "next/head";
 import Navbar from "components/Navbar";
 import Footer from "components/Footer";
 
+const NOTES_SHARPS = [
+  "C",
+  "C#",
+  "D",
+  "D#",
+  "E",
+  "F",
+  "F#",
+  "G",
+  "G#",
+  "A",
+  "A#",
+  "B",
+];
+const NOTES_FLATS = [
+  "C",
+  "Db",
+  "D",
+  "Eb",
+  "E",
+  "F",
+  "Gb",
+  "G",
+  "Ab",
+  "A",
+  "Bb",
+  "B",
+];
+
+const C_MAJOR = ["C", "D", "E", "F", "G", "A", "B"];
+const C_MINOR = ["C", "D", "Eb", "F", "G", "Ab", "Bb"];
+
+const GUITAR_FRETBOARD = [
+  [4, 5, 6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 0, 1, 2, 3],
+  [11, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+  [7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5, 6],
+  [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 0, 1],
+  [9, 10, 11, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5, 6, 7, 8],
+  [4, 5, 6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 0, 1, 2, 3],
+];
+
 export default function Home() {
   return (
     <div className={""}>
@@ -11,36 +52,30 @@ export default function Home() {
       </Head>
       <Navbar />
       <main>
-        <h1 className={"text-5xl"}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+        <h1 className={"text-5xl"}>Scale Helper</h1>
+        <p>Visualize scales on your instrument.</p>
 
-        <p>
-          Get started by editing <code>pages/index.js</code>
-        </p>
-
+        <h2 className="text-3xl pt-4 pb-2">Eb Major / C Minor</h2>
         <div>
-          <a href="https://nextjs.org/docs">
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn">
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a href="https://github.com/vercel/next.js/tree/canary/examples">
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a href="https://vercel.com/new">
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
+          {GUITAR_FRETBOARD.map((string, stringNumber) => {
+            return (
+              <div key={"string-" + stringNumber}>
+                {string.map((fret, fretNumber) => (
+                  <button
+                    className={
+                      "px-4 py-2" +
+                      (C_MINOR.indexOf(NOTES_FLATS[fret]) > -1
+                        ? " text-green-500"
+                        : "")
+                    }
+                    key={"string-" + stringNumber + "-fret-" + fretNumber}
+                  >
+                    {NOTES_FLATS[fret]}
+                  </button>
+                ))}
+              </div>
+            );
+          })}
         </div>
       </main>
       <Footer />

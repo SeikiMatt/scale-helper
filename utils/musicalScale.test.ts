@@ -1,4 +1,4 @@
-import { generateScale } from "./musicalScales";
+import { generateScale, normalizePitch } from "./musicalScales";
 
 test("Scale of root 0 and mode 0 and Natural notes returns C Ionian/Major", () => {
   expect(generateScale({ root: 0, mode: 0, notes: "natural" })).toStrictEqual([
@@ -46,4 +46,12 @@ test("Scale of root 11 and mode 6 and Flat notes returns Cb Locrian", () => {
     "G",
     "A",
   ]);
+});
+
+test("Pitch 12 will be normalized to 0", () => {
+  expect(normalizePitch(12)).toStrictEqual(0);
+});
+
+test("Pitch -1 will be normalized to 11", () => {
+  expect(normalizePitch(-1)).toStrictEqual(11);
 });

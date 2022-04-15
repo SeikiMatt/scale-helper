@@ -33,3 +33,7 @@ export function generateScale({
 
   return scale.map((e, k) => noteMapping[notes][scale[k]]);
 }
+
+export function normalizePitch(pitch: number) {
+  return pitch < 0 ? pitch + 12 : pitch > 11 ? pitch - 12 : pitch;
+}

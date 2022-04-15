@@ -8,7 +8,11 @@ type Indexable = {
   [key: string]: string[];
 };
 
-export function generateScale({ root, mode, notes }: GenerateScale) {
+export function generateScale({
+  root,
+  mode,
+  notes,
+}: GenerateScale): string[] | null {
   if (root < 0 || root > 11 || mode < 0 || mode > 6) return null;
 
   const ionianSequence = [2, 2, 1, 2, 2, 2, 1];

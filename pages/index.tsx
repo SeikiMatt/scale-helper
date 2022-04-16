@@ -1,51 +1,43 @@
+import React, { useState } from "react";
 import Head from "next/head";
 import Navbar from "components/Navbar";
 import Footer from "components/Footer";
+import Select from "react-select";
+import { generateScale, normalizePitch } from "../utils/musicalScales";
 
-const NOTES_SHARPS = [
-  "C",
-  "C#",
-  "D",
-  "D#",
-  "E",
-  "F",
-  "F#",
-  "G",
-  "G#",
-  "A",
-  "A#",
-  "B",
-];
-const NOTES_FLATS = [
-  "C",
-  "Db",
-  "D",
-  "Eb",
-  "E",
-  "F",
-  "Gb",
-  "G",
-  "Ab",
-  "A",
-  "Bb",
-  "B",
-];
+const scalesToGenerate = [0, 2, 4, 5, 7, 9, 11];
+let allMajorScales: any[] = [];
 
-const C_MAJOR = ["C", "D", "E", "F", "G", "A", "B"];
-const C_MINOR = ["C", "D", "Eb", "F", "G", "Ab", "Bb"];
+scalesToGenerate.forEach((e) => {
+  for (let mode = 0; mode < 1; mode++) {
+    allMajorScales = [
+      ...allMajorScales,
+      generateScale({ root: normalizePitch(e - 1), mode, notes: "flat" }),
+    ];
+    allMajorScales = [
+      ...allMajorScales,
+      generateScale({ root: normalizePitch(e), mode, notes: "natural" }),
+    ];
+    allMajorScales = [
+      ...allMajorScales,
+      generateScale({
+        root: normalizePitch(e + 1),
+        mode,
+        notes: "sharp",
+      }),
+    ];
+  }
+});
 
-const GUITAR_FRETBOARD = [
-  [4, 5, 6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 0, 1, 2, 3],
-  [11, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-  [7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5, 6],
-  [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 0, 1],
-  [9, 10, 11, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5, 6, 7, 8],
-  [4, 5, 6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 0, 1, 2, 3],
-];
+const optionsScales = allMajorScales.map((e, k) => ({ value: k, label: e[0] }));
 
 export default function Home() {
+  const [currentScale, setCurrentScale] = useState(0);
+
+  const handleCurrentScaleChange = (e: any) => setCurrentScale(e.value);
+
   return (
-    <div className={""}>
+    <div>
       <Head>
         <title>Create Next App</title>
         <link rel="icon" href="/favicon.ico" />
@@ -54,28 +46,57 @@ export default function Home() {
       <main>
         <h1 className={"text-5xl"}>Scale Helper</h1>
         <p>Visualize scales on your instrument.</p>
-
-        <h2 className="text-3xl pt-4 pb-2">Eb Major / C Minor</h2>
         <div>
-          {GUITAR_FRETBOARD.map((string, stringNumber) => {
-            return (
-              <div key={"string-" + stringNumber}>
-                {string.map((fret, fretNumber) => (
-                  <button
-                    className={
-                      "px-4 py-2" +
-                      (C_MINOR.indexOf(NOTES_FLATS[fret]) > -1
-                        ? " text-green-500"
-                        : "")
-                    }
-                    key={"string-" + stringNumber + "-fret-" + fretNumber}
-                  >
-                    {NOTES_FLATS[fret]}
-                  </button>
-                ))}
-              </div>
-            );
-          })}
+          <Select options={optionsScales} onChange={handleCurrentScaleChange} />
+        </div>
+        <div>
+          <p>
+            {allMajorScales[currentScale].map((e: string) => (
+              <button className="text-2xl py-2 px-4">{e}</button>
+            ))}
+          </p>
+        </div>
+        <div className="w-screen">
+          <div className="flex fixed">
+            <div className="bg-black h-40 w-8 mx-0.5  flex flex-col-reverse text-center text-white">
+              C
+            </div>
+            <div className="bg-black h-40 w-8 mx-0.5  flex flex-col-reverse text-center text-white">
+              D
+            </div>
+            <div className="bg-black h-40 w-8 mx-0.5  flex flex-col-reverse text-center text-white">
+              E
+            </div>
+            <div className="bg-black h-40 w-8 mx-0.5  flex flex-col-reverse text-center text-white">
+              F
+            </div>
+            <div className="bg-black h-40 w-8 mx-0.5  flex flex-col-reverse text-center text-white">
+              G
+            </div>
+            <div className="bg-black h-40 w-8 mx-0.5  flex flex-col-reverse text-center text-white">
+              A
+            </div>
+            <div className="bg-black h-40 w-8 mx-0.5  flex flex-col-reverse text-center text-white">
+              B
+            </div>
+          </div>
+          <div className="flex fixed">
+            <div className="bg-red-500 h-24 w-6 ml-6 flex flex-col-reverse text-center text-white">
+              C♯
+            </div>
+            <div className="bg-red-500 h-24 w-6 ml-3 flex flex-col-reverse text-center text-white">
+              D♯
+            </div>
+            <div className="bg-red-500 h-24 w-6 ml-12 flex flex-col-reverse text-center text-white">
+              F♯
+            </div>
+            <div className="bg-red-500 h-24 w-6 ml-3 flex flex-col-reverse text-center text-white">
+              G♯
+            </div>
+            <div className="bg-red-500 h-24 w-6 ml-3 flex flex-col-reverse text-center text-white">
+              A♯
+            </div>
+          </div>
         </div>
       </main>
       <Footer />

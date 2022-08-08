@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import WhiteKey from "./WhiteKey";
 import BlackKey from "./BlackKey";
+import { pitchToNote, normalizePitch } from "utils/musicalScales";
 
 interface Props {
   scale: {
@@ -12,30 +13,68 @@ interface Props {
 }
 
 export default function Piano({ scale }: Props) {
-  const whiteKeyNotes = ["C", "D", "E", "F", "G", "A", "B"];
-  const blackKeyNotes = {
-    flat: ["D♭", "E♭", "G♭", "A♭", "B♭"],
-    sharp: ["C♯", "D♯", "F♯", "G♯", "A♯"],
+  const pitchToHighlight = (pitch: number) => {
+    return scale.notes[0] === pitch ? 1 : scale.notes.includes(pitch) ? 2 : 0;
   };
 
-  const [setWhiteKeyHighlights, whiteKeyHighlights] = useState([
-    0, 2, 4, 5, 7, 9, 11,
-  ]);
-  const [setBlackKeyHightlists, blackKeyHightlists] = useState([]);
-
   return (
-    <div className="w-full h-96 px-16">
+    <div className="w-full h-[444px] py-9 px-2 sm:px-[15%] md:px-[20%] lg:px-[25%] xl:px-[30%]">
       <div className="flex w-full h-full">
-        {whiteKeyNotes.map((note, number) => (
-          <WhiteKey note={note} />
-        ))}
+        <WhiteKey
+          note={pitchToNote({ pitch: 0, degree: scale.degree }) || ""}
+          highlight={pitchToHighlight(0)}
+        />
+        <WhiteKey
+          note={pitchToNote({ pitch: 2, degree: scale.degree }) || ""}
+          highlight={pitchToHighlight(2)}
+        />
+        <WhiteKey
+          note={pitchToNote({ pitch: 4, degree: scale.degree }) || ""}
+          highlight={pitchToHighlight(4)}
+        />
+        <WhiteKey
+          note={pitchToNote({ pitch: 5, degree: scale.degree }) || ""}
+          highlight={pitchToHighlight(5)}
+        />
+        <WhiteKey
+          note={pitchToNote({ pitch: 7, degree: scale.degree }) || ""}
+          highlight={pitchToHighlight(7)}
+        />
+        <WhiteKey
+          note={pitchToNote({ pitch: 9, degree: scale.degree }) || ""}
+          highlight={pitchToHighlight(9)}
+        />
+        <WhiteKey
+          note={pitchToNote({ pitch: 11, degree: scale.degree }) || ""}
+          highlight={pitchToHighlight(11)}
+        />
       </div>
       <div className="flex w-full h-2/3 z-10 mt-[-24rem]">
-        <BlackKey note="C#" className="ml-[9.25%]" />
-        <BlackKey note="D#" className="ml-[4%]" />
-        <BlackKey note="F#" className="ml-[16.75%]" />
-        <BlackKey note="G#" className="ml-[5.5%]" />
-        <BlackKey note="A#" className="ml-[6%]" />
+        <BlackKey
+          note={pitchToNote({ pitch: 1, degree: scale.degree }) || ""}
+          highlight={pitchToHighlight(1)}
+          className="ml-[9.25%]"
+        />
+        <BlackKey
+          note={pitchToNote({ pitch: 3, degree: scale.degree }) || ""}
+          highlight={pitchToHighlight(3)}
+          className="ml-[4%]"
+        />
+        <BlackKey
+          note={pitchToNote({ pitch: 6, degree: scale.degree }) || ""}
+          highlight={pitchToHighlight(6)}
+          className="ml-[16.75%]"
+        />
+        <BlackKey
+          note={pitchToNote({ pitch: 8, degree: scale.degree }) || ""}
+          highlight={pitchToHighlight(8)}
+          className="ml-[5.5%]"
+        />
+        <BlackKey
+          note={pitchToNote({ pitch: 10, degree: scale.degree }) || ""}
+          highlight={pitchToHighlight(10)}
+          className="ml-[6%]"
+        />
       </div>
     </div>
   );

@@ -18,7 +18,7 @@ export default function WhiteKey({
       className={`
         ${className ? className + " " : ""} ${
         highlight === 1 ? rootColor : highlight === 2 ? noteColor : baseColor
-      } pb-4 border-x-2 border-b-4 drop-shadow rounded-md h-full w-[calc(100%/7)] mx-0.5 flex flex-col-reverse text-center text-white`}
+      } pb-4 border-x-2 border-b-8 drop-shadow rounded-md h-full w-[calc(100%/7)] mx-0.5 flex flex-col-reverse text-center text-white`}
     >
       {note}
     </div>

@@ -102,7 +102,21 @@ export default function Home() {
   return (
     <div>
       <Head>
-        <title>Create Next App</title>
+        <title>Scale Helper - Visualize scales on your instrument</title>
+        <meta property="og:title" content="Scale Helper" />
+        <meta
+          property="og:description"
+          content="Visualize scales on your musical instrument."
+        />
+        <meta property="og:url" content="https://scale-helper.vercel.app" />
+        <meta
+          property="og:image"
+          content="https://scale-helper.vercel.app/meta-img.png"
+        />
+
+        <meta property="og:locale" content="en_US" />
+        <meta property="og:locale:alternate" content="pt_BR" />
+
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Navbar />

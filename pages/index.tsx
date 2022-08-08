@@ -6,10 +6,11 @@ import Piano from "components/Instruments/Piano";
 import Guitar from "components/Instruments/Guitar";
 import Select from "components/Select";
 import { generateHeptatonicScale } from "utils/musicalScales";
+import { pitchToNote } from "utils/musicalScales";
 
 export default function Home() {
   const instrumentTypes = [
-    // { label: "Piano", value: "0" },
+    { label: "Piano", value: "0" },
     { label: "Guitar", value: "1" },
   ];
 
@@ -41,23 +42,23 @@ export default function Home() {
       { label: "B♭", value: "10-1-1" },
       { label: "B", value: "11-2-1" },
       { label: "C", value: "0-1-1" },
-      { label: "C#", value: "1-2-1" },
+      { label: "C♯", value: "1-2-1" },
       { label: "D", value: "2-1-1" },
       { label: "D♯", value: "3-2-1" },
       { label: "E♭", value: "3-1-1" },
       { label: "E", value: "4-2-1" },
       { label: "F", value: "5-1-1" },
-      { label: "F#", value: "6-2-1" },
+      { label: "F♯", value: "6-2-1" },
       { label: "G", value: "7-1-1" },
-      { label: "G#", value: "8-2-1" },
+      { label: "G♯", value: "8-2-1" },
     ],
   ];
 
-  const [currInstrument, setCurrInstrument] = useState(1);
+  const [currInstrument, setCurrInstrument] = useState(0);
   const [currScaleType, setCurrScaleType] = useState([...scales[0]]);
   const [currScale, setCurrScale] = useState({
     root: 0,
-    notes: [0, 2, 4, 5, 7, 9, 11],
+    notes: generateHeptatonicScale({ root: 0, mode: 0 }),
     degree: 0,
     mode: 0,
   });
@@ -71,7 +72,7 @@ export default function Home() {
     if (value === 0) {
       setCurrScale({
         root: 0,
-        notes: [0, 2, 4, 5, 7, 9, 11],
+        notes: generateHeptatonicScale({ root: 0, mode: 0 }),
         degree: 0,
         mode: 0,
       });
@@ -126,6 +127,18 @@ export default function Home() {
               options={currScaleType}
             />
           </div>
+        </div>
+
+        <div>
+          {currScale.notes.map((note, k) => (
+            <span
+              className={`text-3xl mx-4 font-semibold${
+                k === 0 ? " text-purple-600" : " text-blue-600"
+              }`}
+            >
+              {pitchToNote({ pitch: note, degree: currScale.degree })}
+            </span>
+          ))}
         </div>
 
         {currInstrument === 0 ? (

@@ -1,11 +1,21 @@
+import { stringify } from "postcss";
+
 interface GenerateHeptatonicScale {
   root: number;
   mode: number;
 }
 
-type Indexable = {
-  [key: string]: any;
-};
+export function noteAlphabetToUnicode(note: string) {
+  return note.replace("#", "♯").replace("b", "♭");
+}
+
+export function noteUnicodeToAlphabet(note: string) {
+  return note.replace("♯", "#").replace("♭", "b");
+}
+
+export function normalizePitch(pitch: number) {
+  return pitch < 0 ? pitch + 12 : pitch > 11 ? pitch - 12 : pitch;
+}
 
 export function generateHeptatonicScale({
   root,
@@ -104,10 +114,6 @@ export function pitchToNote({ pitch, degree }: PitchToNote) {
   ];
 
   return noteSequences[degree][pitch];
-}
-
-export function normalizePitch(pitch: number) {
-  return pitch < 0 ? pitch + 12 : pitch > 11 ? pitch - 12 : pitch;
 }
 
 // export function isScaleTheoretical(scale: number[]) {

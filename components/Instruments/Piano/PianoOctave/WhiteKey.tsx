@@ -6,12 +6,14 @@ interface Props {
   onMouseUp?: Function;
   className?: string;
   note: string;
+  pitch: number;
   highlight?: number;
 }
 
 export default function WhiteKey({
   className = "",
   note,
+  pitch,
   highlight = 0,
   onClick,
   onMouseDown,

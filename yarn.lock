@@ -636,6 +636,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/runtime@npm:^7.18.9":
+  version: 7.18.9
+  resolution: "@babel/runtime@npm:7.18.9"
+  dependencies:
+    regenerator-runtime: ^0.13.4
+  checksum: 36dd736baba7164e82b3cc9d43e081f0cb2d05ff867ad39cac515d99546cee75b7f782018b02a3dcf5f2ef3d27f319faa68965fdfec49d4912c60c6002353a2e
+  languageName: node
+  linkType: hard
+
 "@babel/template@npm:^7.16.7, @babel/template@npm:^7.3.3":
   version: 7.16.7
   resolution: "@babel/template@npm:7.16.7"
@@ -1995,6 +2004,16 @@ __metadata:
   bin:
     atob: bin/atob.js
   checksum: dfeeeb70090c5ebea7be4b9f787f866686c645d9f39a0d184c817252d0cf08455ed25267d79c03254d3be1f03ac399992a792edcd5ffb9c91e097ab5ef42833a
+  languageName: node
+  linkType: hard
+
+"automation-events@npm:^4.0.20":
+  version: 4.0.20
+  resolution: "automation-events@npm:4.0.20"
+  dependencies:
+    "@babel/runtime": ^7.18.9
+    tslib: ^2.4.0
+  checksum: 3edf2ebbf9d5283ccbae526be5f6a9918b9404be289d7de175aa1e89c59ccb00bf37ceab690a3b84e0cec204122c516354dacc9f3492fb2a0f391947d83e5c59
   languageName: node
   linkType: hard
 
@@ -6763,6 +6782,7 @@ next@latest:
     react-dom: ^17.0.2
     react-icons: ^4.3.1
     tailwindcss: ^3.0.23
+    tone: 14.7.77
     typescript: 4.5.4
     unicode: ^14.0.0
   languageName: unknown
@@ -6967,6 +6987,17 @@ next@latest:
   dependencies:
     escape-string-regexp: ^2.0.0
   checksum: 76b69da0f5b48a34a0f93c98ee2a96544d2c4ca2557f7eef5ddb961d3bdc33870b46f498a84a7c4f4ffb781df639840e7ebf6639164ed4da5e1aeb659615b9c7
+  languageName: node
+  linkType: hard
+
+"standardized-audio-context@npm:^25.1.8":
+  version: 25.3.29
+  resolution: "standardized-audio-context@npm:25.3.29"
+  dependencies:
+    "@babel/runtime": ^7.18.9
+    automation-events: ^4.0.20
+    tslib: ^2.4.0
+  checksum: 28c0159b7502d5a163a082a85973a1b9028ced1f8c4f0cc777c094c79878e3babfe5e33ed8278ca1ab948b32f5f3132ead8406de1395fab04b5cb83d375477ed
   languageName: node
   linkType: hard
 
@@ -7283,6 +7314,16 @@ next@latest:
   languageName: node
   linkType: hard
 
+"tone@npm:14.7.77":
+  version: 14.7.77
+  resolution: "tone@npm:14.7.77"
+  dependencies:
+    standardized-audio-context: ^25.1.8
+    tslib: ^2.0.1
+  checksum: cb0dfea08fddd38d7cacdc23eaa4ab98660ca4b60fe7b7431413d79937deee790b3237aa51b2c440ebd5477dace00e1f72d48dd09553c5cad83e9750eba17ea0
+  languageName: node
+  linkType: hard
+
 "tough-cookie@npm:^4.0.0":
   version: 4.0.0
   resolution: "tough-cookie@npm:4.0.0"
@@ -7319,6 +7360,13 @@ next@latest:
   version: 1.14.1
   resolution: "tslib@npm:1.14.1"
   checksum: dbe628ef87f66691d5d2959b3e41b9ca0045c3ee3c7c7b906cc1e328b39f199bb1ad9e671c39025bd56122ac57dfbf7385a94843b1cc07c60a4db74795829acd
+  languageName: node
+  linkType: hard
+
+"tslib@npm:^2.0.1, tslib@npm:^2.4.0":
+  version: 2.4.0
+  resolution: "tslib@npm:2.4.0"
+  checksum: 8c4aa6a3c5a754bf76aefc38026134180c053b7bd2f81338cb5e5ebf96fefa0f417bff221592bf801077f5bf990562f6264fecbc42cd3309b33872cb6fc3b113
   languageName: node
   linkType: hard
 

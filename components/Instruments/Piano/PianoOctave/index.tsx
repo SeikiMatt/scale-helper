@@ -10,9 +10,21 @@ interface Props {
     degree: number;
     mode: number;
   };
+  octave: number;
+  playNote: Function;
 }
 
-export default function PianoOctave({ scale }: Props) {
+export default function PianoOctave({ scale, playNote, octave }: Props) {
+  const whiteKeyNotes = [0, 2, 4, 5, 7, 9, 11];
+  const blackKeyNotes = [1, 3, 6, 8, 10];
+  const blackKeyMargins = [
+    "ml-[9.25%]",
+    "ml-[4%]",
+    "ml-[16.75%]",
+    "ml-[5.5%]",
+    "ml-[6%]",
+  ];
+
   const pitchToHighlight = (pitch: number) => {
     return scale.notes[0] === pitch ? 1 : scale.notes.includes(pitch) ? 2 : 0;
   };
@@ -20,61 +32,29 @@ export default function PianoOctave({ scale }: Props) {
   return (
     <>
       <div className="flex w-full h-full">
-        <WhiteKey
-          note={pitchToNote({ pitch: 0, degree: scale.degree }) || ""}
-          highlight={pitchToHighlight(0)}
-        />
-        <WhiteKey
-          note={pitchToNote({ pitch: 2, degree: scale.degree }) || ""}
-          highlight={pitchToHighlight(2)}
-        />
-        <WhiteKey
-          note={pitchToNote({ pitch: 4, degree: scale.degree }) || ""}
-          highlight={pitchToHighlight(4)}
-        />
-        <WhiteKey
-          note={pitchToNote({ pitch: 5, degree: scale.degree }) || ""}
-          highlight={pitchToHighlight(5)}
-        />
-        <WhiteKey
-          note={pitchToNote({ pitch: 7, degree: scale.degree }) || ""}
-          highlight={pitchToHighlight(7)}
-        />
-        <WhiteKey
-          note={pitchToNote({ pitch: 9, degree: scale.degree }) || ""}
-          highlight={pitchToHighlight(9)}
-        />
-        <WhiteKey
-          note={pitchToNote({ pitch: 11, degree: scale.degree }) || ""}
-          highlight={pitchToHighlight(11)}
-        />
+        {whiteKeyNotes.map((note) => (
+          <WhiteKey
+            note={pitchToNote({ pitch: note, degree: scale.degree }) || ""}
+            pitch={note}
+            highlight={pitchToHighlight(note)}
+            onMouseDown={(e: React.MouseEvent) =>
+              playNote(pitchToNote({ pitch: note, degree: 0 }), octave)
+            }
+          />
+        ))}
       </div>
       <div className="flex w-full h-2/3 z-10 mt-[-24rem]">
-        <BlackKey
-          note={pitchToNote({ pitch: 1, degree: scale.degree }) || ""}
-          highlight={pitchToHighlight(1)}
-          className="ml-[9.25%]"
-        />
-        <BlackKey
-          note={pitchToNote({ pitch: 3, degree: scale.degree }) || ""}
-          highlight={pitchToHighlight(3)}
-          className="ml-[4%]"
-        />
-        <BlackKey
-          note={pitchToNote({ pitch: 6, degree: scale.degree }) || ""}
-          highlight={pitchToHighlight(6)}
-          className="ml-[16.75%]"
-        />
-        <BlackKey
-          note={pitchToNote({ pitch: 8, degree: scale.degree }) || ""}
-          highlight={pitchToHighlight(8)}
-          className="ml-[5.5%]"
-        />
-        <BlackKey
-          note={pitchToNote({ pitch: 10, degree: scale.degree }) || ""}
-          highlight={pitchToHighlight(10)}
-          className="ml-[6%]"
-        />
+        {blackKeyNotes.map((note, index) => (
+          <BlackKey
+            note={pitchToNote({ pitch: note, degree: scale.degree }) || ""}
+            pitch={note}
+            highlight={pitchToHighlight(note)}
+            className={blackKeyMargins[index]}
+            onMouseDown={(e: React.MouseEvent) =>
+              playNote(pitchToNote({ pitch: note, degree: 0 }), octave)
+            }
+          />
+        ))}
       </div>
     </>
   );

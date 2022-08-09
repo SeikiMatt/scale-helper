@@ -43,6 +43,14 @@ export default function WhiteKey({
         if (onMouseDown) onMouseDown(e);
         handlePress(e);
       }}
+      onTouchStart={(e) => {
+        if (onMouseDown) onMouseDown(e);
+        handlePress(e);
+      }}
+      onTouchEnd={(e) => {
+        if (onMouseUp) onMouseUp(e);
+        setIsPressed(false);
+      }}
       className={`
         ${className ? className + " " : ""} ${
         highlight === 1 ? rootColor : highlight === 2 ? noteColor : baseColor

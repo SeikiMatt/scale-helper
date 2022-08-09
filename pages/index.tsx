@@ -146,6 +146,7 @@ export default function Home() {
         <div>
           {currScale.notes.map((note, k) => (
             <span
+              key={"scalenotedisplay-" + k}
               className={`text-3xl mx-4 font-semibold${
                 k === 0 ? " text-purple-600" : " text-blue-600"
               }`}

@@ -153,6 +153,12 @@ export default function Home() {
               {pitchToNote({ pitch: note, degree: currScale.degree })}
             </span>
           ))}
+          <span className="text-3xl mx-4 font-semibold text-purple-600">
+            {pitchToNote({
+              pitch: currScale.notes[0],
+              degree: currScale.degree,
+            })}
+          </span>
         </div>
 
         {currInstrument === 0 ? (

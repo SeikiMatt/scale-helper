@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Note from "components/Instruments/Guitar/Note";
 import { pitchToNote, normalizePitch } from "utils/musicalScales";
 
 interface Props {
@@ -24,6 +25,10 @@ export default function Guitar({ scale, options }: Props) {
     return noteSequence;
   });
 
+  const pitchToHighlight = (pitch: number) => {
+    return scale.notes[0] === pitch ? 1 : scale.notes.includes(pitch) ? 2 : 0;
+  };
+
   return (
     <div className="w-full h-64 my-8 px-4 sm:px-4 lg:px-16 xl:px-48">
       <div className="w-full flex flex-col h-[13.5rem]">
@@ -31,6 +36,7 @@ export default function Guitar({ scale, options }: Props) {
           <div className="flex flex-grow">
             {noteMatrix[x].map((_, y) => (
               <div
+                key={"guitar-notetable-" + x + "-" + y}
                 className={
                   y === 0
                     ? "border-gray-200 border-r-8 ml-[-2px] flex-grow"
@@ -49,27 +55,19 @@ export default function Guitar({ scale, options }: Props) {
             <tr className="">
               {noteMatrix[x].map((_, y) => (
                 <td className={`text-center w-[calc(100%/${x})]`}>
-                  <button
-                    className={`w-8 h-8 bg-white border-2 border-gray-200 rounded-xl
-                      ${
-                        normalizePitch(
+                  <Note
+                    note={
+                      pitchToNote({
+                        pitch: normalizePitch(
                           noteMatrix[options.strings - x - 1][y]
-                        ) === scale.notes[0]
-                          ? " bg-purple-300 border-purple-500"
-                          : scale.notes.includes(
-                              normalizePitch(noteMatrix[x][y])
-                            ) === true
-                          ? " bg-blue-300 border-blue-500"
-                          : ""
-                      }`}
-                  >
-                    {pitchToNote({
-                      pitch: normalizePitch(
-                        noteMatrix[options.strings - x - 1][y]
-                      ),
-                      degree: scale.degree,
-                    })}
-                  </button>
+                        ),
+                        degree: scale.degree,
+                      }) || ""
+                    }
+                    highlight={pitchToHighlight(
+                      normalizePitch(noteMatrix[options.strings - x - 1][y])
+                    )}
+                  />
                 </td>
               ))}
             </tr>

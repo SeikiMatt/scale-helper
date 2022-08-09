@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface Props {
   onClick?: Function;
@@ -30,12 +30,12 @@ export default function BlackKey({
     setIsPressed(true);
   }
 
-  if (typeof window !== "undefined") {
+  useEffect(() => {
     document.body.addEventListener("mouseup", (e) => {
       if (onMouseUp) onMouseUp(e);
       setIsPressed(false);
     });
-  }
+  }, []);
 
   return (
     <button

@@ -45,8 +45,14 @@ export default function BlackKey({
         if (onClick) onClick(e);
       }}
       onMouseDown={(e) => {
-        if (onMouseDown) onMouseDown(e);
-        handlePress(e);
+        if (
+          !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+            navigator.userAgent
+          )
+        ) {
+          if (onMouseDown) onMouseDown(e);
+          handlePress(e);
+        }
       }}
       onTouchStart={(e) => {
         if (onMouseDown) onMouseDown(e);

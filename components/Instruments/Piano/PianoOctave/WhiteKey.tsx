@@ -32,18 +32,26 @@ export default function WhiteKey({
     });
   }, []);
 
-  function handlePress(e: React.FormEvent<HTMLButtonElement>) {
+  function handlePress(e: React.FormEvent<HTMLDivElement>) {
     setIsPressed(true);
   }
 
   return (
-    <button
+    <div
       onClick={(e) => {
         if (onClick) onClick(e);
       }}
       onMouseDown={(e) => {
-        if (onMouseDown) onMouseDown(e);
-        handlePress(e);
+        if (
+          !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+            navigator.userAgent
+          )
+        ) {
+          if (!isPressed) {
+            if (onMouseDown) onMouseDown(e);
+            handlePress(e);
+          }
+        }
       }}
       onTouchStart={(e) => {
         if (onMouseDown) onMouseDown(e);
@@ -63,6 +71,6 @@ export default function WhiteKey({
       } pb-4 border-x-2 drop-shadow rounded-md w-[calc(100%/7)] mx-0.5 flex flex-col-reverse text-center`}
     >
       {note}
-    </button>
+    </div>
   );
 }

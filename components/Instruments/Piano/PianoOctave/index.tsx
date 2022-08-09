@@ -22,7 +22,7 @@ export default function PianoOctave({ scale, playNote, octave }: Props) {
     "ml-[4%]",
     "ml-[16.75%]",
     "ml-[5.5%]",
-    "ml-[6%]",
+    "ml-[5%]",
   ];
 
   const pitchToHighlight = (pitch: number) => {

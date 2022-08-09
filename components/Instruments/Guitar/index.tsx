@@ -52,7 +52,9 @@ export default function Guitar({ scale, options }: Props) {
                   <button
                     className={`w-8 h-8 bg-white border-2 border-gray-200 rounded-xl
                       ${
-                        scale.notes[0] === normalizePitch(noteMatrix[x][y])
+                        normalizePitch(
+                          noteMatrix[options.strings - x - 1][y]
+                        ) === scale.notes[0]
                           ? " bg-purple-300 border-purple-500"
                           : scale.notes.includes(
                               normalizePitch(noteMatrix[x][y])

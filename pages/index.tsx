@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Head from "next/head";
 import Navbar from "components/Navbar";
 import Footer from "components/Footer";
@@ -7,13 +7,8 @@ import Guitar from "components/Instruments/Guitar";
 import Select from "components/Select";
 import { generateHeptatonicScale } from "utils/musicalScales";
 import { pitchToNote } from "utils/musicalScales";
-import * as Tone from "tone";
 
 export default function Home() {
-  useEffect(() => {
-    const synth = new Tone.Synth().toDestination();
-  }, []);
-
   const instrumentTypes = [
     { label: "Piano", value: "0" },
     { label: "Guitar", value: "1" },

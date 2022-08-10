@@ -11,7 +11,6 @@ export interface Props {
 }
 
 export default function WhiteKey(props: Props) {
-  console.log(props.className);
   return (
     <Interactible
       {...props}

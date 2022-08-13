@@ -1,15 +1,10 @@
 import React, { useEffect } from "react";
 import PianoOctave from "./PianoOctave";
 import * as Tone from "tone";
-import { noteUnicodeToAlphabet } from "utils/musicalScales";
+import { Scale } from "utils/musicalScales";
 
 interface Props {
-  scale: {
-    root: number;
-    notes: number[];
-    degree: number;
-    mode: number;
-  };
+  scale: Scale;
 }
 
 export default function Piano({ scale }: Props) {
@@ -28,7 +23,10 @@ export default function Piano({ scale }: Props) {
   });
 
   function playNote(note: string, octave: number) {
-    synth.triggerAttackRelease(noteUnicodeToAlphabet(note) + octave, "8n");
+    synth.triggerAttackRelease(
+      Scale.noteUnicodeToAlphabet(note) + octave,
+      "8n"
+    );
   }
 
   return (

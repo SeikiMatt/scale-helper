@@ -5,8 +5,7 @@ import Footer from "components/Footer";
 import Piano from "components/Instruments/Piano";
 import Guitar from "components/Instruments/Guitar";
 import Select from "components/Select";
-import { generateHeptatonicScale } from "utils/musicalScales";
-import { pitchToNote } from "utils/musicalScales";
+import { Scale, SharpsOrFlats } from "utils/musicalScales";
 
 export default function Home() {
   const instrumentTypes = [
@@ -56,12 +55,14 @@ export default function Home() {
 
   const [currInstrument, setCurrInstrument] = useState(0);
   const [currScaleType, setCurrScaleType] = useState([...scales[0]]);
-  const [currScale, setCurrScale] = useState({
-    root: 0,
-    notes: generateHeptatonicScale({ root: 0, mode: 0 }),
-    degree: 0,
-    mode: 0,
-  });
+  const [currScale, setCurrScale] = useState(
+    new Scale({
+      root: 0,
+      sharpsOrFlats: SharpsOrFlats.Natural,
+      mode: 0,
+      intervals: Scale.ionianSequence,
+    })
+  );
 
   const handleInstrumentChange = (e: React.FormEvent<HTMLSelectElement>) =>
     setCurrInstrument(parseInt(e.currentTarget.value));
@@ -70,33 +71,39 @@ export default function Home() {
     const value = parseInt(e.currentTarget.value);
     setCurrScaleType([...scales[value]]);
     if (value === 0) {
-      setCurrScale({
-        root: 0,
-        notes: generateHeptatonicScale({ root: 0, mode: 0 }),
-        degree: 0,
-        mode: 0,
-      });
+      setCurrScale(
+        new Scale({
+          root: 0,
+          sharpsOrFlats: SharpsOrFlats.Natural,
+          mode: 0,
+          intervals: Scale.ionianSequence,
+        })
+      );
     } else {
-      setCurrScale({
-        root: 9,
-        notes: generateHeptatonicScale({ root: 9, mode: 1 }),
-        degree: 0,
-        mode: 1,
-      });
+      setCurrScale(
+        new Scale({
+          root: 9,
+          sharpsOrFlats: SharpsOrFlats.Natural,
+          mode: 5,
+          intervals: Scale.ionianSequence,
+        })
+      );
     }
   };
 
   const handleScaleChange = (e: React.FormEvent<HTMLSelectElement>) => {
     const dataSplit = e.currentTarget.value.split("-");
     const root = parseInt(dataSplit[0]);
-    const degree = parseInt(dataSplit[1]);
+    const sharpsOrFlats = parseInt(dataSplit[1]);
     const mode = parseInt(dataSplit[2]);
-    setCurrScale({
-      root,
-      degree,
-      mode,
-      notes: generateHeptatonicScale({ root, mode }),
-    });
+    setCurrScale(
+      new Scale({
+        root,
+        sharpsOrFlats,
+        mode,
+        intervals: Scale.ionianSequence,
+      })
+    );
   };
 
   return (
@@ -151,13 +158,16 @@ export default function Home() {
                 k === 0 ? " text-purple-600" : " text-blue-600"
               }`}
             >
-              {pitchToNote({ pitch: note, degree: currScale.degree })}
+              {Scale.pitchToNote({
+                pitch: note,
+                sharpsOrFlats: currScale.sharpsOrFlats,
+              })}
             </span>
           ))}
           <span className="text-3xl mx-4 font-semibold text-purple-600">
-            {pitchToNote({
+            {Scale.pitchToNote({
               pitch: currScale.notes[0],
-              degree: currScale.degree,
+              sharpsOrFlats: currScale.sharpsOrFlats,
             })}
           </span>
         </div>

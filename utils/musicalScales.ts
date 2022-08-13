@@ -1,120 +1,142 @@
-import { stringify } from "postcss";
+export enum SharpsOrFlats {
+  Natural,
+  Flat,
+  Sharp,
+}
 
-interface GenerateHeptatonicScale {
+interface ScaleConstructor {
   root: number;
+  sharpsOrFlats: SharpsOrFlats;
   mode: number;
+  intervals: number[];
 }
 
-export function noteAlphabetToUnicode(note: string) {
-  return note.replace("#", "♯").replace("b", "♭");
+export interface Scale {
+  root: number;
+  sharpsOrFlats: SharpsOrFlats;
+  mode: number;
+  intervals: number[];
+  notes: number[];
 }
 
-export function noteUnicodeToAlphabet(note: string) {
-  return note.replace("♯", "#").replace("♭", "b");
-}
-
-export function normalizePitch(pitch: number) {
-  return pitch < 0 ? pitch + 12 : pitch > 11 ? pitch - 12 : pitch;
-}
-
-export function generateHeptatonicScale({
-  root,
-  mode,
-}: GenerateHeptatonicScale): number[] {
-  if (root < 0 || root > 11 || mode < 0 || mode > 1) return [];
-
-  const modes = [
-    [2, 2, 1, 2, 2, 2, 1],
-    [2, 1, 2, 2, 1, 2, 2],
-  ];
-
-  let scale = [root];
-
-  for (let i = 0; i < modes[mode].length - 1; i++) {
-    let note = scale[i] + modes[mode][i];
-    scale = [...scale, note < 12 ? note : note - 12];
+export class Scale {
+  constructor({
+    root = 0,
+    sharpsOrFlats = SharpsOrFlats.Natural,
+    mode = 0,
+    intervals = [2, 2, 1, 2, 2, 2, 1],
+  }: ScaleConstructor) {
+    this.root = root;
+    this.sharpsOrFlats = sharpsOrFlats;
+    this.mode = mode;
+    this.intervals = intervals;
+    this.notes = Scale.generateScale({ root, mode, intervals });
   }
 
-  return scale;
+  public static ionianSequence = [2, 2, 1, 2, 2, 2, 1];
+
+  static generateScale({
+    root,
+    mode,
+    intervals,
+  }: {
+    root: number;
+    mode: number;
+    intervals: number[];
+  }): number[] {
+    if (root < 0 || root > 11) {
+      return [];
+    }
+    if (mode < 0 || mode > intervals.length) {
+      return [];
+    }
+
+    const sequenceEnd = intervals.slice(0, mode);
+    const sequenceStart = intervals.slice(mode, intervals.length);
+    const modeSequence = [...sequenceStart, ...sequenceEnd];
+
+    let scale = [root];
+
+    for (let i = 0; i < modeSequence.length - 1; i++) {
+      let note = scale[i] + modeSequence[i];
+      scale = [...scale, note < 12 ? note : note - 12];
+    }
+
+    return scale;
+  }
+
+  static normalizePitch(pitch: number) {
+    return pitch < 0 ? pitch + 12 : pitch > 11 ? pitch - 12 : pitch;
+  }
+
+  static pitchToNote({
+    pitch,
+    sharpsOrFlats,
+  }: {
+    pitch: number;
+    sharpsOrFlats: number;
+  }): string {
+    if (sharpsOrFlats < 0 || sharpsOrFlats > 2) return "";
+
+    const noteSequences = [
+      ["C", "C♯", "D", "D♯", "E", "F", "F♯", "G", "G♯", "A", "A♯", "B"],
+      ["C", "D♭", "D", "E♭", "F♭", "F", "G♭", "G", "A♭", "A", "B♭", "C♭"],
+      ["B♯", "C♯", "D", "D♯", "E", "E♯", "F♯", "G", "G♯", "A", "A♯", "B"],
+    ];
+
+    return noteSequences[sharpsOrFlats][pitch];
+  }
+
+  static noteAlphabetToUnicode(note: string) {
+    return note.replace("#", "♯").replace("b", "♭");
+  }
+
+  static noteUnicodeToAlphabet(note: string) {
+    return note.replace("♯", "#").replace("♭", "b");
+  }
 }
 
-// export function generateHeptatonicScale({
-//   root,
-//   mode,
-// }: GenerateHeptatonicScale): number[] | null {
-//   if (root < 0 || root > 11 || mode < 0 || mode > 6) return null;
+// import { stringify } from "postcss";
 
-//   const ionianSequence = [2, 2, 1, 2, 2, 2, 1];
-//   const sequenceEnd = ionianSequence.slice(0, mode);
-//   const sequenceStart = ionianSequence.slice(mode, ionianSequence.length);
-//   const modeSequence = [...sequenceStart, ...sequenceEnd];
+// export function generateMajorCircleOfFifths() {
+//   let scales = [
+//     {
+//       root: 0,
+//       sharpsOrFlats: 0,
+//       scale: generateHeptatonicScale({ root: 0, mode: 0 }),
+//     },
+//   ];
 
-//   let scale = [root];
+//   let steps = 0;
+//   let noteAcc = normalizePitch(-5);
 
-//   for (let i = 0; i < modeSequence.length - 1; i++) {
-//     let note = scale[i] + modeSequence[i];
-//     scale = [...scale, note < 12 ? note : note - 12];
+//   while (steps < 7) {
+//     scales.push({
+//       root: noteAcc,
+//       sharpsOrFlats: 2,
+//       scale: generateHeptatonicScale({ root: noteAcc, mode: 0 }),
+//     });
+
+//     noteAcc = normalizePitch(noteAcc - 5);
+//     steps++;
 //   }
 
-//   return scale;
+//   steps = 0;
+//   noteAcc = 5;
+
+//   while (steps < 7) {
+//     scales.unshift({
+//       root: noteAcc,
+//       sharpsOrFlats: 1,
+//       scale: generateHeptatonicScale({ root: noteAcc, mode: 0 }),
+//     });
+
+//     noteAcc = normalizePitch(noteAcc + 5);
+//     steps++;
+//   }
+
+//   return scales;
 // }
-
-export function generateMajorCircleOfFifths() {
-  let scales = [
-    {
-      root: 0,
-      degree: 0,
-      scale: generateHeptatonicScale({ root: 0, mode: 0 }),
-    },
-  ];
-
-  let steps = 0;
-  let noteAcc = normalizePitch(-5);
-
-  while (steps < 7) {
-    scales.push({
-      root: noteAcc,
-      degree: 2,
-      scale: generateHeptatonicScale({ root: noteAcc, mode: 0 }),
-    });
-
-    noteAcc = normalizePitch(noteAcc - 5);
-    steps++;
-  }
-
-  steps = 0;
-  noteAcc = 5;
-
-  while (steps < 7) {
-    scales.unshift({
-      root: noteAcc,
-      degree: 1,
-      scale: generateHeptatonicScale({ root: noteAcc, mode: 0 }),
-    });
-
-    noteAcc = normalizePitch(noteAcc + 5);
-    steps++;
-  }
-
-  return scales;
-}
-
-interface PitchToNote {
-  pitch: number;
-  degree: number;
-}
-
-export function pitchToNote({ pitch, degree }: PitchToNote) {
-  if (degree < 0 || degree > 2) return null;
-
-  const noteSequences = [
-    ["C", "C♯", "D", "D♯", "E", "F", "F♯", "G", "G♯", "A", "A♯", "B"],
-    ["C", "D♭", "D", "E♭", "F♭", "F", "G♭", "G", "A♭", "A", "B♭", "C♭"],
-    ["B♯", "C♯", "D", "D♯", "E", "E♯", "F♯", "G", "G♯", "A", "A♯", "B"],
-  ];
-
-  return noteSequences[degree][pitch];
-}
 
 // export function isScaleTheoretical(scale: number[]) {
 //   const ionianSequence = [2, 2, 1, 2, 2, 2, 1];

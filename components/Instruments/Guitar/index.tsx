@@ -1,14 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import Note from "components/Instruments/Guitar/Note";
-import { pitchToNote, normalizePitch } from "utils/musicalScales";
+import * as Tone from "tone";
+import { Scale } from "utils/musicalScales";
 
 interface Props {
-  scale: {
-    root: number;
-    notes: number[];
-    degree: number;
-    mode: number;
-  };
+  scale: Scale;
   options: {
     strings: number;
     frets: number;
@@ -17,10 +13,31 @@ interface Props {
 }
 
 export default function Guitar({ scale, options }: Props) {
+  let synth: any;
+  useEffect(() => {
+    synth = new Tone.Sampler({
+      urls: {
+        C4: "C4.mp3",
+        "D#4": "Ds4.mp3",
+        "F#4": "Fs4.mp3",
+        A4: "A4.mp3",
+      },
+      release: 1,
+      baseUrl: "https://tonejs.github.io/audio/salamander/",
+    }).toDestination();
+  });
+
+  function playNote(note: string, octave: number) {
+    synth.triggerAttackRelease(
+      Scale.noteUnicodeToAlphabet(note) + octave,
+      "8n"
+    );
+  }
+
   const noteMatrix = options.tuning.map((root) => {
     const noteSequence = [root];
     for (let i = 1; i < options.frets + 1; i++)
-      noteSequence.push(normalizePitch(root + i));
+      noteSequence.push(Scale.normalizePitch(root + i));
 
     return noteSequence;
   });
@@ -57,15 +74,20 @@ export default function Guitar({ scale, options }: Props) {
                 <td className={`text-center w-[calc(100%/${x})]`}>
                   <Note
                     note={
-                      pitchToNote({
-                        pitch: normalizePitch(
+                      Scale.pitchToNote({
+                        pitch: Scale.normalizePitch(
                           noteMatrix[options.strings - x - 1][y]
                         ),
-                        degree: scale.degree,
+                        sharpsOrFlats: scale.sharpsOrFlats,
                       }) || ""
                     }
+                    pitch={Scale.normalizePitch(
+                      noteMatrix[options.strings - x - 1][y]
+                    )}
                     highlight={pitchToHighlight(
-                      normalizePitch(noteMatrix[options.strings - x - 1][y])
+                      Scale.normalizePitch(
+                        noteMatrix[options.strings - x - 1][y]
+                      )
                     )}
                   />
                 </td>

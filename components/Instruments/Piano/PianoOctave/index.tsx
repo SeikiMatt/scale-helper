@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import WhiteKey from "./WhiteKey";
 import BlackKey from "./BlackKey";
-import { pitchToNote, normalizePitch } from "utils/musicalScales";
+import { Scale } from "utils/musicalScales";
 
 interface Props {
   scale: {
     root: number;
     notes: number[];
-    degree: number;
+    sharpsOrFlats: number;
     mode: number;
   };
   octave: number;
@@ -34,11 +34,19 @@ export default function PianoOctave({ scale, playNote, octave }: Props) {
       <div className="flex w-full h-full">
         {whiteKeyNotes.map((note) => (
           <WhiteKey
-            note={pitchToNote({ pitch: note, degree: scale.degree }) || ""}
+            note={
+              Scale.pitchToNote({
+                pitch: note,
+                sharpsOrFlats: scale.sharpsOrFlats,
+              }) || ""
+            }
             pitch={note}
             highlight={pitchToHighlight(note)}
             onMouseDown={(e: React.MouseEvent) =>
-              playNote(pitchToNote({ pitch: note, degree: 0 }), octave)
+              playNote(
+                Scale.pitchToNote({ pitch: note, sharpsOrFlats: 0 }),
+                octave
+              )
             }
           />
         ))}
@@ -46,12 +54,20 @@ export default function PianoOctave({ scale, playNote, octave }: Props) {
       <div className="flex w-full h-2/3 z-10 mt-[-24rem]">
         {blackKeyNotes.map((note, index) => (
           <BlackKey
-            note={pitchToNote({ pitch: note, degree: scale.degree }) || ""}
+            note={
+              Scale.pitchToNote({
+                pitch: note,
+                sharpsOrFlats: scale.sharpsOrFlats,
+              }) || ""
+            }
             pitch={note}
             highlight={pitchToHighlight(note)}
             className={blackKeyMargins[index]}
             onMouseDown={(e: React.MouseEvent) =>
-              playNote(pitchToNote({ pitch: note, degree: 0 }), octave)
+              playNote(
+                Scale.pitchToNote({ pitch: note, sharpsOrFlats: 0 }),
+                octave
+              )
             }
           />
         ))}

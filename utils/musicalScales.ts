@@ -21,9 +21,9 @@ export interface Scale {
 
 export class Scale {
   constructor({
-    root = 0,
-    sharpsOrFlats = SharpsOrFlats.Natural,
-    mode = 0,
+    root,
+    sharpsOrFlats,
+    mode,
     intervals = [2, 2, 1, 2, 2, 2, 1],
   }: ScaleConstructor) {
     this.root = root;
@@ -44,12 +44,7 @@ export class Scale {
     mode: number;
     intervals: number[];
   }): number[] {
-    if (root < 0 || root > 11) {
-      return [];
-    }
-    if (mode < 0 || mode > intervals.length) {
-      return [];
-    }
+    if (root < 0 || root > 11 || mode < 0 || mode > intervals.length) return [];
 
     const sequenceEnd = intervals.slice(0, mode);
     const sequenceStart = intervals.slice(mode, intervals.length);
@@ -59,14 +54,14 @@ export class Scale {
 
     for (let i = 0; i < modeSequence.length - 1; i++) {
       let note = scale[i] + modeSequence[i];
-      scale = [...scale, note < 12 ? note : note - 12];
+      scale = [...scale, Scale.normalizePitch(note)];
     }
 
     return scale;
   }
 
   static normalizePitch(pitch: number) {
-    return pitch < 0 ? pitch + 12 : pitch > 11 ? pitch - 12 : pitch;
+    return pitch - Math.floor(pitch / 12) * 12;
   }
 
   static pitchToNote({

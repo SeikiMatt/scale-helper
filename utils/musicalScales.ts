@@ -24,7 +24,7 @@ export class Scale {
     root,
     sharpsOrFlats,
     mode,
-    intervals = [2, 2, 1, 2, 2, 2, 1],
+    intervals = Scale.intervalSequences.heptatonicNaturalMajor,
   }: ScaleConstructor) {
     this.root = root;
     this.sharpsOrFlats = sharpsOrFlats;
@@ -33,7 +33,10 @@ export class Scale {
     this.notes = Scale.generateScale({ root, mode, intervals });
   }
 
-  public static ionianSequence = [2, 2, 1, 2, 2, 2, 1];
+  public static intervalSequences = {
+    heptatonicNaturalMajor: [2, 2, 1, 2, 2, 2, 1],
+    pentatonicNaturalMajor: [2, 2, 3, 2, 3],
+  };
 
   static generateScale({
     root,
@@ -44,7 +47,8 @@ export class Scale {
     mode: number;
     intervals: number[];
   }): number[] {
-    if (root < 0 || root > 11 || mode < 0 || mode > intervals.length) return [];
+    if (root < 0 || root > 11 || mode < 0 || mode > intervals.length - 1)
+      return [];
 
     const sequenceEnd = intervals.slice(0, mode);
     const sequenceStart = intervals.slice(mode, intervals.length);

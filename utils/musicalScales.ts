@@ -65,7 +65,7 @@ export class Scale {
   }
 
   static normalizePitch(pitch: number) {
-    return pitch - Math.floor(pitch / 12) * 12;
+    return Math.abs(pitch - Math.floor(pitch / 12) * 12);
   }
 
   static pitchToNote({

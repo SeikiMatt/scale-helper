@@ -60,7 +60,6 @@ export default function Home() {
       root: 0,
       sharpsOrFlats: SharpsOrFlats.Natural,
       mode: 0,
-      intervals: Scale.ionianSequence,
     })
   );
 
@@ -76,7 +75,6 @@ export default function Home() {
           root: 0,
           sharpsOrFlats: SharpsOrFlats.Natural,
           mode: 0,
-          intervals: Scale.ionianSequence,
         })
       );
     } else {
@@ -85,7 +83,6 @@ export default function Home() {
           root: 9,
           sharpsOrFlats: SharpsOrFlats.Natural,
           mode: 5,
-          intervals: Scale.ionianSequence,
         })
       );
     }
@@ -101,7 +98,6 @@ export default function Home() {
         root,
         sharpsOrFlats,
         mode,
-        intervals: Scale.ionianSequence,
       })
     );
   };

@@ -8,7 +8,7 @@ interface ScaleConstructor {
   root: number;
   sharpsOrFlats: SharpsOrFlats;
   mode: number;
-  intervals: number[];
+  intervals?: number[];
 }
 
 export interface Scale {

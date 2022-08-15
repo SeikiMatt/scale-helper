@@ -175,7 +175,15 @@ export default function Home() {
             options={{
               strings: 6,
               frets: 15,
-              tuning: [4, 9, 2, 7, 11, 4],
+              tuning: [
+                { pitch: 4, octave: 4 },
+                { pitch: 9, octave: 3 },
+                { pitch: 2, octave: 3 },
+                { pitch: 7, octave: 3 },
+                { pitch: 11, octave: 2 },
+                { pitch: 4, octave: 2 },
+              ],
+              instrument: "guitar-acoustic",
             }}
           />
         ) : currInstrument === 2 ? (
@@ -184,7 +192,13 @@ export default function Home() {
             options={{
               strings: 4,
               frets: 15,
-              tuning: [4, 9, 2, 7],
+              tuning: [
+                { pitch: 4, octave: 2 },
+                { pitch: 9, octave: 2 },
+                { pitch: 2, octave: 1 },
+                { pitch: 7, octave: 1 },
+              ],
+              instrument: "electric-bass",
             }}
           />
         ) : null}

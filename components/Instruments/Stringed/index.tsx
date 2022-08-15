@@ -8,23 +8,59 @@ interface Props {
   options: {
     strings: number;
     frets: number;
-    tuning: number[];
+    tuning: { pitch: number; octave: number }[];
+    instrument: string;
   };
 }
 
-export default function Guitar({ scale, options }: Props) {
+const instruments: any = {
+  "guitar-acoustic": {
+    urls: {
+      A2: "A2.mp3",
+      A3: "A3.mp3",
+      A4: "A4.mp3",
+      "A#2": "As2.mp3",
+      "A#3": "As3.mp3",
+      "A#4": "As4.mp3",
+      B2: "B2.mp3",
+      B3: "B3.mp3",
+      B4: "B4.mp3",
+      C3: "C3.mp3",
+      C4: "C4.mp3",
+      "C#3": "Cs3.mp3",
+      "C#4": "Cs4.mp3",
+    },
+    release: 1,
+    baseUrl: "/samples/guitar-acoustic/",
+  },
+  "electric-bass": {
+    urls: {
+      "A#1": "As1.mp3",
+      "A#2": "As2.mp3",
+      "A#3": "As3.mp3",
+      "A#4": "As4.mp3",
+      "C#1": "Cs1.mp3",
+      "C#2": "Cs2.mp3",
+      "C#3": "Cs3.mp3",
+      "C#4": "Cs4.mp3",
+      E1: "E1.mp3",
+      E2: "E2.mp3",
+      E3: "E3.mp3",
+      E4: "E4.mp3",
+      G1: "G1.mp3",
+      G2: "G2.mp3",
+      G3: "G3.mp3",
+      G4: "G4.mp3",
+    },
+    release: 1,
+    baseUrl: "/samples/bass-electric/",
+  },
+};
+
+export default function Stringed({ scale, options }: Props) {
   let synth: any;
   useEffect(() => {
-    synth = new Tone.Sampler({
-      urls: {
-        C4: "C4.mp3",
-        "D#4": "Ds4.mp3",
-        "F#4": "Fs4.mp3",
-        A4: "A4.mp3",
-      },
-      release: 1,
-      baseUrl: "https://tonejs.github.io/audio/salamander/",
-    }).toDestination();
+    synth = new Tone.Sampler(instruments[options.instrument]).toDestination();
   });
 
   function playNote(note: string, octave: number) {
@@ -34,10 +70,9 @@ export default function Guitar({ scale, options }: Props) {
     );
   }
 
-  const noteMatrix = options.tuning.map((root) => {
-    const noteSequence = [root];
-    for (let i = 1; i < options.frets + 1; i++)
-      noteSequence.push(Scale.normalizePitch(root + i));
+  const noteMatrix = options.tuning.map((e) => {
+    const noteSequence = [e.pitch];
+    for (let i = 1; i < options.frets + 1; i++) noteSequence.push(e.pitch + i);
 
     return noteSequence;
   });
@@ -88,6 +123,18 @@ export default function Guitar({ scale, options }: Props) {
                 highlight={pitchToHighlight(
                   Scale.normalizePitch(noteMatrix[options.strings - x - 1][y])
                 )}
+                onMouseDown={(_: React.MouseEvent) =>
+                  playNote(
+                    Scale.pitchToNote({
+                      pitch: Scale.normalizePitch(
+                        noteMatrix[options.strings - x - 1][y]
+                      ),
+                      sharpsOrFlats: 0,
+                    }),
+                    options.tuning[x].octave +
+                      Math.floor(noteMatrix[options.strings - x - 1][y] / 12)
+                  )
+                }
               />
             </div>
           ))}

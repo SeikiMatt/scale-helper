@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import Head from "next/head";
-import Navbar from "components/Navbar";
 import Footer from "components/Footer";
 import Piano from "components/Instruments/Piano";
-import Guitar from "components/Instruments/Guitar";
+import Stringed from "components/Instruments/Stringed";
 import Select from "components/Select";
 import { Scale, SharpsOrFlats } from "utils/musicalScales";
 
@@ -11,6 +10,7 @@ export default function Home() {
   const instrumentTypes = [
     { label: "Piano", value: "0" },
     { label: "Guitar", value: "1" },
+    { label: "Electric Bass", value: "2" },
   ];
 
   const scaleTypes = [
@@ -122,28 +122,27 @@ export default function Home() {
 
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Navbar />
+
       <main>
-        <h1 className={"text-5xl"}>Scale Helper</h1>
+        <h1 className={"text-5xl mt-24"}>Scale Helper</h1>
         <p>Visualize scales on your instrument.</p>
-        <div>
-          <div className="flex justify-center w-full mt-8 mb-4">
-            <Select
-              className="w-32"
-              onChange={handleInstrumentChange}
-              options={instrumentTypes}
-            />
-            <Select
-              className="w-32 mx-2"
-              onChange={handleScaleTypeChange}
-              options={scaleTypes}
-            />
-            <Select
-              className="w-18"
-              onChange={handleScaleChange}
-              options={currScaleType}
-            />
-          </div>
+
+        <div className="flex justify-center my-4">
+          <Select
+            className="w-32"
+            onChange={handleInstrumentChange}
+            options={instrumentTypes}
+          />
+          <Select
+            className="w-32 mx-2"
+            onChange={handleScaleTypeChange}
+            options={scaleTypes}
+          />
+          <Select
+            className="w-18"
+            onChange={handleScaleChange}
+            options={currScaleType}
+          />
         </div>
 
         <div>
@@ -171,12 +170,21 @@ export default function Home() {
         {currInstrument === 0 ? (
           <Piano scale={currScale} />
         ) : currInstrument === 1 ? (
-          <Guitar
+          <Stringed
             scale={currScale}
             options={{
               strings: 6,
               frets: 15,
               tuning: [4, 9, 2, 7, 11, 4],
+            }}
+          />
+        ) : currInstrument === 2 ? (
+          <Stringed
+            scale={currScale}
+            options={{
+              strings: 4,
+              frets: 15,
+              tuning: [4, 9, 2, 7],
             }}
           />
         ) : null}

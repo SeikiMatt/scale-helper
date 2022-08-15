@@ -1,17 +1,14 @@
-import Image from "next/image";
+import { BsGithub } from "react-icons/bs";
 
 export default function Footer() {
   return (
-    <footer className={""}>
+    <footer>
       <a
-        href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
+        href="https://github.com/SeikiMatt/scale-helper"
         target="_blank"
         rel="noopener noreferrer"
       >
-        Powered by{" "}
-        <span className={""}>
-          <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-        </span>
+        <BsGithub className="h-8 w-8" />
       </a>
     </footer>
   );

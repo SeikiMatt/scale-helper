@@ -93,49 +93,75 @@ export class Scale {
   static noteUnicodeToAlphabet(note: string) {
     return note.replace("♯", "#").replace("♭", "b");
   }
+
+  static generateCircleOfInterval({
+    root,
+    mode,
+    iterations,
+    intervals,
+  }: {
+    root: number;
+    mode: number;
+    iterations: number;
+    intervals: number[];
+  }) {
+    let scales: Scale[] = [
+      {
+        root,
+        mode,
+        sharpsOrFlats: 0,
+        intervals,
+        notes: Scale.generateScale({
+          root,
+          mode,
+          intervals: intervals,
+        }),
+      },
+    ];
+
+    let steps = 0;
+    let noteAcc = Scale.normalizePitch(-5);
+
+    while (steps < iterations) {
+      scales.push({
+        root: noteAcc,
+        mode,
+        sharpsOrFlats: 2,
+        intervals,
+        notes: Scale.generateScale({
+          root: noteAcc,
+          mode,
+          intervals: intervals,
+        }),
+      });
+
+      noteAcc = Scale.normalizePitch(noteAcc - 5);
+      steps++;
+    }
+
+    steps = 0;
+    noteAcc = 5;
+
+    while (steps < iterations) {
+      scales.unshift({
+        root: noteAcc,
+        mode,
+        sharpsOrFlats: 1,
+        intervals,
+        notes: Scale.generateScale({
+          root: noteAcc,
+          mode,
+          intervals: intervals,
+        }),
+      });
+
+      noteAcc = Scale.normalizePitch(noteAcc + 5);
+      steps++;
+    }
+
+    return scales;
+  }
 }
-
-// import { stringify } from "postcss";
-
-// export function generateMajorCircleOfFifths() {
-//   let scales = [
-//     {
-//       root: 0,
-//       sharpsOrFlats: 0,
-//       scale: generateHeptatonicScale({ root: 0, mode: 0 }),
-//     },
-//   ];
-
-//   let steps = 0;
-//   let noteAcc = normalizePitch(-5);
-
-//   while (steps < 7) {
-//     scales.push({
-//       root: noteAcc,
-//       sharpsOrFlats: 2,
-//       scale: generateHeptatonicScale({ root: noteAcc, mode: 0 }),
-//     });
-
-//     noteAcc = normalizePitch(noteAcc - 5);
-//     steps++;
-//   }
-
-//   steps = 0;
-//   noteAcc = 5;
-
-//   while (steps < 7) {
-//     scales.unshift({
-//       root: noteAcc,
-//       sharpsOrFlats: 1,
-//       scale: generateHeptatonicScale({ root: noteAcc, mode: 0 }),
-//     });
-
-//     noteAcc = normalizePitch(noteAcc + 5);
-//     steps++;
-//   }
-
-//   return scales;
-// }
 
 // export function isScaleTheoretical(scale: number[]) {
 //   const ionianSequence = [2, 2, 1, 2, 2, 2, 1];

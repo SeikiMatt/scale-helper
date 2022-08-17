@@ -32,8 +32,9 @@ export default function PianoOctave({ scale, playNote, octave }: Props) {
   return (
     <>
       <div className="flex w-full h-full">
-        {whiteKeyNotes.map((note) => (
+        {whiteKeyNotes.map((note, index) => (
           <WhiteKey
+            key={"whitekey-" + index}
             note={
               Scale.pitchToNote({
                 pitch: note,
@@ -54,6 +55,7 @@ export default function PianoOctave({ scale, playNote, octave }: Props) {
       <div className="flex w-full h-2/3 z-10 mt-[-24rem]">
         {blackKeyNotes.map((note, index) => (
           <BlackKey
+            key={"blackkey-" + index}
             note={
               Scale.pitchToNote({
                 pitch: note,

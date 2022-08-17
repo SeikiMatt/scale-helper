@@ -6,6 +6,10 @@ import Stringed from "components/Instruments/Stringed";
 import Select from "components/Select";
 import { Scale, SharpsOrFlats } from "utils/musicalScales";
 
+function reorderArrayFrom(arr: any[], index: number) {
+  return arr.slice(index).concat(arr.slice(0, index));
+}
+
 export default function Home() {
   const instrumentTypes = [
     { label: "Piano", value: "0" },
@@ -19,93 +23,63 @@ export default function Home() {
   ];
 
   const scales = [
-    [
-      { label: "C", value: "0-0-0" },
-      { label: "C♯", value: "1-2-0" },
-      { label: "D♭", value: "1-1-0" },
-      { label: "D", value: "2-2-0" },
-      { label: "E♭", value: "3-1-0" },
-      { label: "E", value: "4-2-0" },
-      { label: "F", value: "5-1-0" },
-      { label: "F♯", value: "6-2-0" },
-      { label: "G♭", value: "6-1-0" },
-      { label: "G", value: "7-2-0" },
-      { label: "A♭", value: "8-1-0" },
-      { label: "A", value: "9-2-0" },
-      { label: "B♭", value: "10-1-0" },
-      { label: "B", value: "11-2-0" },
-      { label: "C♭", value: "11-1-0" },
-    ],
-    [
-      { label: "A", value: "9-0-1" },
-      { label: "B♭", value: "10-1-1" },
-      { label: "B", value: "11-2-1" },
-      { label: "C", value: "0-1-1" },
-      { label: "C♯", value: "1-2-1" },
-      { label: "D", value: "2-1-1" },
-      { label: "D♯", value: "3-2-1" },
-      { label: "E♭", value: "3-1-1" },
-      { label: "E", value: "4-2-1" },
-      { label: "F", value: "5-1-1" },
-      { label: "F♯", value: "6-2-1" },
-      { label: "G", value: "7-1-1" },
-      { label: "G♯", value: "8-2-1" },
-    ],
+    Scale.generateCircleOfInterval({
+      root: 0,
+      mode: 0,
+      iterations: 7,
+      intervals: Scale.intervalSequences.heptatonicNaturalMajor,
+    }).sort((a, b) => a.root - b.root),
+    reorderArrayFrom(
+      Scale.generateCircleOfInterval({
+        root: 0,
+        mode: 5,
+        iterations: 6,
+        intervals: Scale.intervalSequences.heptatonicNaturalMajor,
+      }).sort((a, b) => a.root - b.root),
+      10
+    ),
   ];
 
+  const generateScaleOptions = (currScaleType: number) => {
+    const options = scales[currScaleType].map((e, k) => {
+      return {
+        label: Scale.pitchToNote({
+          pitch: e.root,
+          sharpsOrFlats: e.sharpsOrFlats,
+        }),
+        value: String(k),
+      };
+    });
+    console.log(options);
+    return options;
+  };
+
   const [currInstrument, setCurrInstrument] = useState(0);
-  const [currScaleType, setCurrScaleType] = useState([...scales[0]]);
-  const [currScale, setCurrScale] = useState(
-    new Scale({
-      root: 0,
-      sharpsOrFlats: SharpsOrFlats.Natural,
-      mode: 0,
-    })
+  const [currScaleType, setCurrScaleType] = useState(0);
+  const [currScale, setCurrScale] = useState(scales[0][0]);
+  const [currScaleOptions, setCurrScaleOptions] = useState(
+    generateScaleOptions(currScaleType)
   );
 
   const handleInstrumentChange = (e: React.FormEvent<HTMLSelectElement>) =>
     setCurrInstrument(parseInt(e.currentTarget.value));
 
   const handleScaleTypeChange = (e: React.FormEvent<HTMLSelectElement>) => {
-    const value = parseInt(e.currentTarget.value);
-    setCurrScaleType([...scales[value]]);
-    if (value === 0) {
-      setCurrScale(
-        new Scale({
-          root: 0,
-          sharpsOrFlats: SharpsOrFlats.Natural,
-          mode: 0,
-        })
-      );
-    } else {
-      setCurrScale(
-        new Scale({
-          root: 9,
-          sharpsOrFlats: SharpsOrFlats.Natural,
-          mode: 5,
-        })
-      );
-    }
+    setCurrScaleType(parseInt(e.currentTarget.value));
+    setCurrScale(scales[parseInt(e.currentTarget.value)][0]);
+    setCurrScaleOptions(generateScaleOptions(parseInt(e.currentTarget.value)));
   };
 
   const handleScaleChange = (e: React.FormEvent<HTMLSelectElement>) => {
-    const dataSplit = e.currentTarget.value.split("-");
-    const root = parseInt(dataSplit[0]);
-    const sharpsOrFlats = parseInt(dataSplit[1]);
-    const mode = parseInt(dataSplit[2]);
-    setCurrScale(
-      new Scale({
-        root,
-        sharpsOrFlats,
-        mode,
-      })
-    );
+    setCurrScale(scales[currScaleType][parseInt(e.currentTarget.value)]);
   };
 
   return (
     <div>
       <Head>
-        <title>Scale Helper - Visualize scales on your instrument</title>
+        <title>
+          Scale Helper - Visualize musical scales on your instrument
+        </title>
         <meta property="og:title" content="Scale Helper" />
         <meta
           property="og:description"
@@ -116,10 +90,8 @@ export default function Home() {
           property="og:image"
           content="https://scale-helper.vercel.app/meta-img.png"
         />
-
         <meta property="og:locale" content="en_US" />
         <meta property="og:locale:alternate" content="pt_BR" />
-
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
@@ -139,14 +111,15 @@ export default function Home() {
             options={scaleTypes}
           />
           <Select
+            key={`currentscale-select-${currScaleType}`}
             className="w-18"
             onChange={handleScaleChange}
-            options={currScaleType}
+            options={currScaleOptions}
           />
         </div>
 
         <div>
-          {currScale.notes.map((note, k) => (
+          {currScale.notes.map((note: number, k: number) => (
             <span
               key={"scalenotedisplay-" + k}
               className={`text-3xl mx-4 font-semibold${

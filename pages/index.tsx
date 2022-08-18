@@ -4,7 +4,7 @@ import Footer from "components/Footer";
 import Piano from "components/Instruments/Piano";
 import Stringed from "components/Instruments/Stringed";
 import Select from "components/Select";
-import { Scale, SharpsOrFlats } from "utils/musicalScales";
+import { Scale } from "utils/musicalScales";
 
 function reorderArrayFrom(arr: any[], index: number) {
   return arr.slice(index).concat(arr.slice(0, index));
@@ -41,7 +41,7 @@ export default function Home() {
   ];
 
   const generateScaleOptions = (currScaleType: number) => {
-    const options = scales[currScaleType].map((e, k) => {
+    return scales[currScaleType].map((e, k) => {
       return {
         label: Scale.pitchToNote({
           pitch: e.root,
@@ -50,8 +50,6 @@ export default function Home() {
         value: String(k),
       };
     });
-    console.log(options);
-    return options;
   };
 
   const [currInstrument, setCurrInstrument] = useState(0);
